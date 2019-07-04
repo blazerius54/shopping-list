@@ -1,0 +1,22 @@
+{
+  "name": "shopping-list",
+  "version": "1.0.0",
+  "description": "App to share shopping list",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blazerius54/shopping-list.git"
+  },
+  "author": "Stepanov M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blazerius54/shopping-list/issues"
+  },
+  "homepage": "https://github.com/blazerius54/shopping-list#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
