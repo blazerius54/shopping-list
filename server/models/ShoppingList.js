@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const ShoppingModel = require('../models/ShoppingItem');
+const ShoppingModel = require('./Products');
 
 const ShoppingListSchema = new Schema({
-  _id: Schema.Types.ObjectId,
   date: {
     type: String,
     required: true,

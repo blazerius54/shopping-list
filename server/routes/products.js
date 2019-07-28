@@ -1,17 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const test = require("../models/ShoppingItem");
-const ShoppingItem = test.ShoppingItem;
+const test = require("../models/Products");
+const ProductsModel = test.ProductsModel;
 const Schema = mongoose.Schema;
 
 router.get("/all", (req, res) => {
-  ShoppingItem.find({}, "-_id")
+  ProductsModel.find({})
       .then(items => res.json(items));
 });
 
 router.post("/new", (req, res) => {
-  const newItem = new ShoppingItem({
+  const newItem = new ProductsModel({
     name: req.body.name
   });
 

@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('./config');
-const ShoppingModel = require('./models/ShoppingItem');
+const test = require('./models/Products');
+const ProductsModel = test.ProductsModel;
 
 const app = express();
 const port = 5000;
@@ -10,7 +11,7 @@ const db = mongoose.connection;
 app.use(express.json());
 
 app.use("/lists", require("./routes/lists"));
-app.use("/items", require("./routes/items"));
+app.use("/products", require("./routes/products"));
 
 app.listen(port, ()=>console.log(`Server started on port ${port}`, config.mongoURI));
 
