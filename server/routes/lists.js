@@ -15,7 +15,7 @@ router.post("/new", (req, res) => {
       amountType,
       amount,
     }))
-  });``
+  });
 
   newList.save().then(item => res.json(item));
 });
