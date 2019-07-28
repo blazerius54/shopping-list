@@ -3,19 +3,19 @@ const express = require('express');
 const router = express.Router();
 
 router.post("/new", (req, res) => {
-  console.log(req.body);
-
+  const { products } = req.body;
   const date = new Date();
+
   const newList = new ShoppingListModel({
     date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
-    items: [{
+    items: products.map(({productId, amountType, amount}) => ({
       product: {
-        _id: req.body.productId,
+        _id: productId,
       },
-      amountType: req.body.amount,
-      amount: req.body.amount,
-    }]
-  });
+      amountType,
+      amount,
+    }))
+  });``
 
   newList.save().then(item => res.json(item));
 });
