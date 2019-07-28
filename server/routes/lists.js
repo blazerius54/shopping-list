@@ -1,6 +1,8 @@
 const ShoppingListModel = require('../models/ShoppingList');
 const express = require('express');
 const router = express.Router();
+const helpers = require('./helpers');
+const deleteHelper = helpers.deleteHelper;
 
 router.post("/new", (req, res) => {
   const { products } = req.body;
@@ -20,8 +22,10 @@ router.post("/new", (req, res) => {
   newList.save().then(item => res.json(item));
 });
 
+router.delete("/delete/:id", (req, res) => deleteHelper(ShoppingListModel, req, res));
+
 router.get("/all", (req, res) => {
-  ShoppingListModel.find({}, "-_id")
+  ShoppingListModel.find({})
       .populate("items.product", "-_id")
       .then(items => res.json(items));
 });
