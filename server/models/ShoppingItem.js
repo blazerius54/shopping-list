@@ -8,9 +8,6 @@ const ShoppingItemSchema = new Schema(
       required: true,
     }
   },
-  {
-    _id: false
-  }
 );
 
 module.exports = {

@@ -7,7 +7,10 @@ const app = express();
 const port = 5000;
 const db = mongoose.connection;
 
+app.use(express.json());
+
 app.use("/lists", require("./routes/lists"));
+app.use("/items", require("./routes/items"));
 
 app.listen(port, ()=>console.log(`Server started on port ${port}`, config.mongoURI));
 
