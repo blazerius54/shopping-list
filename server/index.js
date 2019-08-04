@@ -16,10 +16,10 @@ app.use("/lists", require("./routes/lists"));
 app.use("/products", require("./routes/products"));
 
 // socket setup
-// const io = socket(5050);
-// io.on("connection", (socket) => {
-//   console.log('SOCKET', socket);
-// });
+const io = socket(5050);
+io.on("connection", (socket) => {
+  console.log('SOCKET', socket.id);
+});
 
 
 app.listen(port, ()=>console.log(`Server started on port ${port}`, config.mongoURI));

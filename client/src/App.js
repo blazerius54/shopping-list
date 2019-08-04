@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-// import socketIOClient from "socket.io-client";
-//
-// socketIOClient.connect("http://localhost:5050");
+import socketIOClient from "socket.io-client";
 
 const App = () => {
   const [products, setProducts] = useState([]);
@@ -15,6 +13,7 @@ const App = () => {
       <>
         It`s your app
         <button onClick={fetchProducts}>click</button>
+        <button onClick={()=>socketIOClient.connect("http://localhost:5050")}>fire socket</button>
         {
           products.length > 0 && (
               products.map(({name}, index) => (
