@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+// import socketIOClient from "socket.io-client";
+//
+// socketIOClient.connect("http://localhost:5050");
 
 const App = () => {
   const [products, setProducts] = useState([]);
