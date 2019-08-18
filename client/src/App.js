@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import socketIOClient from "socket.io-client";
 
-const socket = socketIOClient.connect("http://localhost:5050");
+const socket = socketIOClient.connect("http://localhost:5000");
 const App = () => {
   const [products, setProducts] = useState([]);
 
@@ -22,7 +22,6 @@ const App = () => {
     socket.on("get_data", getData);
 
     return () => {
-      console.log("unmt");
       socket.off("get_data");
     }
   }, []);
