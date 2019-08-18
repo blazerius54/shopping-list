@@ -20,10 +20,9 @@ app.use("/products", require("./routes/products"));
 const getProducts = () => {
   ProductsModel.find({})
       .then((products) => {
-        console.log(products)
         io.emit("get_data", products);
       })
-}
+};
 
 // socket setup
 const io = socket(5050);
@@ -34,25 +33,18 @@ io.on("connection", (socket) => {
     console.log("user have disconnected")
   });
 
-  // ProductsModel.find({}, (err, products) => {
-  //   io.emit("products", products);
-  // });
-
   socket.on("initial_data", getProducts);
 
   socket.on("delete_item", (id) => {
-    console.log(id)
     ProductsModel
         .findById(id)
         .then(item => {
           item.remove()
-              .then(()=> getProducts())
-          // io.emit("get_data", products);
+              .then(() => getProducts())
         })
   })
 
 });
-
 
 app.listen(port, () => console.log(`Server started on port ${port}`, config.mongoURI));
 
