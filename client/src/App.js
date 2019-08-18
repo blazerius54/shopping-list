@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import socketIOClient from "socket.io-client";
-
+import { ItemWrapper } from "./styles";
 const socket = socketIOClient.connect("http://localhost:5000");
 const App = () => {
   const [products, setProducts] = useState([]);
@@ -33,7 +33,7 @@ const App = () => {
         {
           products.length > 0 && (
               products.map(({name, _id, date, items}, index) => (
-                  <div key={index} style={{display: "flex"}}>
+                  <ItemWrapper key={index} style={{display: "flex"}}>
                     <p>{date}</p>
                     <ul>
                       {
@@ -43,7 +43,7 @@ const App = () => {
                       }
                     </ul>
                     <button onClick={() => deleteProduct(_id)}>delete</button>
-                  </div>
+                  </ItemWrapper>
               ))
           )
         }
