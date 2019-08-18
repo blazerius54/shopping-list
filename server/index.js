@@ -24,14 +24,14 @@ app.use("/products", require("./routes/products"));
 
 const getProducts = () => {
   ShoppingListModel
-      .find({})
-      .populate("items.product", "-__v")
-      .then((products) => {
-        products.map(item => {
-          console.log(item.items)
-        })
-        io.emit("get_data", products);
-      })
+    .find({})
+    .populate("items.product", "-__v")
+    .then((products) => {
+      products.map(item => {
+        console.log(item.items)
+      });
+      io.emit("get_data", products);
+    });
 };
 
 // socket setup
@@ -44,13 +44,13 @@ io.on("connection", (socket) => {
   socket.on("initial_data", getProducts);
 
   socket.on("delete_item", (id) => {
-    ProductsModel
-        .findById(id)
-        .then(item => {
-          item.remove()
-              .then(() => getProducts())
-        })
-  })
+    ShoppingListModel
+      .findById(id)
+      .then(item => {
+        item.remove()
+            .then(() => getProducts())
+      });
+  });
 });
 
 server.listen(port, () => console.log(`Server started on port ${port}`, config.mongoURI));
