@@ -6,7 +6,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
 
   const getData = (data) => {
-    setProducts(data)
+    setProducts(data);
   };
 
   const deleteProduct = id => {
@@ -32,9 +32,16 @@ const App = () => {
         <button onClick={fetchProducts}>fetchProducts</button>
         {
           products.length > 0 && (
-              products.map(({name, _id}, index) => (
+              products.map(({name, _id, date, items}, index) => (
                   <div key={index} style={{display: "flex"}}>
-                    <p>{name}</p>
+                    <p>{date}</p>
+                    <ul>
+                      {
+                        items.map(({product, _id}) => (
+                          <li key={_id}>{product.name}</li>
+                        ))
+                      }
+                    </ul>
                     <button onClick={() => deleteProduct(_id)}>delete</button>
                   </div>
               ))
