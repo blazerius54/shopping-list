@@ -1,9 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import socketIOClient from "socket.io-client";
-import { ItemWrapper } from "./styles";
+import { MainWrapper, ItemWrapper, ControllsWrapper } from "./styles";
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+
 const socket = socketIOClient.connect("http://localhost:5000");
+
 const App = () => {
   const [products, setProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState("");
+
+  const handleProductOnChange = (e) => {
+    setNewProduct(e.target.value);
+  };
 
   const getData = (data) => {
     setProducts(data);
@@ -27,9 +36,21 @@ const App = () => {
   }, []);
 
   return (
-      <>
+      <MainWrapper>
         It`s your app
         <button onClick={fetchProducts}>fetchProducts</button>
+        <ControllsWrapper>
+          <Input
+              defaultValue={newProduct}
+              inputProps={{
+                'aria-label': 'description',
+              }}
+              onChange={handleProductOnChange}
+          />
+          <Button color="primary">
+            Добавить
+          </Button>
+        </ControllsWrapper>
         {
           products.length > 0 && (
               products.map(({name, _id, date, items}, index) => (
@@ -47,7 +68,7 @@ const App = () => {
               ))
           )
         }
-      </>
+      </MainWrapper>
   )
 };
 
