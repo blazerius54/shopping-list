@@ -30,16 +30,16 @@ const App = () => {
     io.emit(SOCKET.DELETE_SHOPPING_LIST, id);
   };
 
-  const fetchShoppingList = () => {
+  const fetchInitialData = () => {
     io.emit(SOCKET.GET_INITIAL_DATA);
   };
 
-  const fetchProducts = () => {
-    io.emit(SOCKET.GET_INITIAL_DATA);
+  const addNewProduct = () => {
+    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct);
   };
 
   useEffect(() => {
-    fetchShoppingList();
+    fetchInitialData();
     io.on(SOCKET.GET_SHOPPING_LIST, getListData);
     io.on(SOCKET.GET_PRODUCTS, getProductsData);
     return () => {
@@ -49,8 +49,6 @@ const App = () => {
 
   return (
       <MainWrapper>
-        It`s your app
-        <button onClick={fetchShoppingList}>fetchShoppingList</button>
         <ControllsWrapper>
           <Input
               defaultValue={newProduct}
@@ -59,7 +57,7 @@ const App = () => {
               }}
               onChange={handleProductOnChange}
           />
-          <Button color="primary">
+          <Button color="primary" onClick={addNewProduct}>
             Добавить
           </Button>
         </ControllsWrapper>

@@ -25,11 +25,11 @@ app.use("/products", require("./routes/products"));
 
 const getShoppingLists = () => {
   ShoppingListModel
-    .find({})
-    .populate("items.product", "-__v")
-    .then((shoppingLists) => {
-      io.emit(SOCKET.GET_SHOPPING_LIST, shoppingLists);
-    });
+      .find({})
+      .populate("items.product", "-__v")
+      .then((shoppingLists) => {
+        io.emit(SOCKET.GET_SHOPPING_LIST, shoppingLists);
+      });
 };
 
 const getProducts = () => {
@@ -38,6 +38,22 @@ const getProducts = () => {
       .then((products) => {
         io.emit(SOCKET.GET_PRODUCTS, products);
       });
+};
+
+const addNewProduct = (info) => {
+  // const newProduct
+
+  const newItem = new ProductsModel({
+    name: info
+  });
+
+  newItem.save().then(() => {
+    ProductsModel
+        .find({})
+        .then((products) => {
+          io.emit(SOCKET.GET_PRODUCTS, products);
+        });
+  });
 };
 
 const result = () => {
@@ -56,12 +72,14 @@ io.on("connection", (socket) => {
 
   socket.on(SOCKET.DELETE_SHOPPING_LIST, (id) => {
     ShoppingListModel
-      .findById(id)
-      .then(item => {
-        item.remove()
-            .then(() => getShoppingList())
-      });
+        .findById(id)
+        .then(item => {
+          item.remove()
+              .then(() => getShoppingList())
+        });
   });
+
+  socket.on(SOCKET.ADD_NEW_PRODUCT, addNewProduct);
 });
 
 server.listen(port, () => console.log(`Server started on port ${port}`, config.mongoURI));
