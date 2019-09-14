@@ -7,6 +7,7 @@ const cors = require("cors");
 const socket = require("socket.io");
 const ProductsModel = test.ProductsModel;
 const ShoppingListModel = require('./models/ShoppingList');
+const SOCKET = require("../global/consts/socket");
 
 const app = express();
 app.use(cors());
@@ -22,13 +23,26 @@ app.use("/lists", require("./routes/lists"));
 app.use("/products", require("./routes/products"));
 
 
-const getProducts = () => {
+const getShoppingLists = () => {
   ShoppingListModel
     .find({})
     .populate("items.product", "-__v")
-    .then((products) => {
-      io.emit("get_data", products);
+    .then((shoppingLists) => {
+      io.emit(SOCKET.GET_SHOPPING_LIST, shoppingLists);
     });
+};
+
+const getProducts = () => {
+  ProductsModel
+      .find({})
+      .then((products) => {
+        io.emit(SOCKET.GET_PRODUCTS, products);
+      });
+};
+
+const result = () => {
+  getShoppingLists();
+  getProducts();
 };
 
 // socket setup
@@ -38,14 +52,14 @@ io.on("connection", (socket) => {
     console.log("user have disconnected")
   });
 
-  socket.on("initial_data", getProducts);
+  socket.on(SOCKET.GET_INITIAL_DATA, result);
 
-  socket.on("delete_item", (id) => {
+  socket.on(SOCKET.DELETE_SHOPPING_LIST, (id) => {
     ShoppingListModel
       .findById(id)
       .then(item => {
         item.remove()
-            .then(() => getProducts())
+            .then(() => getShoppingList())
       });
   });
 });

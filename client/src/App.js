@@ -3,10 +3,12 @@ import socketIOClient from "socket.io-client";
 import { MainWrapper, ItemWrapper, ControllsWrapper } from "./styles";
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+const SOCKET = require("../../global/consts/socket");
 
-const socket = socketIOClient.connect("http://localhost:5000");
+const io = socketIOClient.connect("http://localhost:5000");
 
 const App = () => {
+  const [shoppingLists, setShoppingLists] = useState([]);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
 
@@ -14,31 +16,41 @@ const App = () => {
     setNewProduct(e.target.value);
   };
 
-  const getData = (data) => {
-    setProducts(data);
+  const getListData = (lists) => {
+    setShoppingLists(lists);
+    console.log(lists);
   };
 
-  const deleteProduct = id => {
-    socket.emit("delete_item", id);
+  const getProductsData = (products) => {
+    setProducts(products);
+    console.log(products);
+  };
+
+  const deleteShoppingList = id => {
+    io.emit(SOCKET.DELETE_SHOPPING_LIST, id);
+  };
+
+  const fetchShoppingList = () => {
+    io.emit(SOCKET.GET_INITIAL_DATA);
   };
 
   const fetchProducts = () => {
-    socket.emit("initial_data");
+    io.emit(SOCKET.GET_INITIAL_DATA);
   };
 
   useEffect(() => {
-    fetchProducts();
-    socket.on("get_data", getData);
-
+    fetchShoppingList();
+    io.on(SOCKET.GET_SHOPPING_LIST, getListData);
+    io.on(SOCKET.GET_PRODUCTS, getProductsData);
     return () => {
-      socket.off("get_data");
+      io.off(SOCKET.GET_SHOPPING_LIST);
     }
   }, []);
 
   return (
       <MainWrapper>
         It`s your app
-        <button onClick={fetchProducts}>fetchProducts</button>
+        <button onClick={fetchShoppingList}>fetchShoppingList</button>
         <ControllsWrapper>
           <Input
               defaultValue={newProduct}
@@ -52,9 +64,9 @@ const App = () => {
           </Button>
         </ControllsWrapper>
         {
-          products.length > 0 && (
-              products.map(({name, _id, date, items}, index) => (
-                  <ItemWrapper key={index} style={{display: "flex"}}>
+          shoppingLists.length > 0 && (
+              shoppingLists.map(({name, _id, date, items}) => (
+                  <ItemWrapper key={_id} style={{display: "flex"}}>
                     <p>{date}</p>
                     <ul>
                       {
@@ -63,8 +75,16 @@ const App = () => {
                         ))
                       }
                     </ul>
-                    <button onClick={() => deleteProduct(_id)}>delete</button>
+                    <button onClick={() => deleteShoppingList(_id)}>delete</button>
                   </ItemWrapper>
+              ))
+          )
+        }
+
+        {
+          products.length > 0 && (
+              products.map(({name}) => (
+                  <p key={name}>{name}</p>
               ))
           )
         }
