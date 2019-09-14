@@ -27,9 +27,6 @@ const getProducts = () => {
     .find({})
     .populate("items.product", "-__v")
     .then((products) => {
-      products.map(item => {
-        console.log(item.items)
-      });
       io.emit("get_data", products);
     });
 };
