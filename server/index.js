@@ -64,11 +64,6 @@ const searchProducts = (name) => {
     .then(products => io.emit(SOCKET.GET_PRODUCTS, products));
 };
 
-const result = () => {
-  getShoppingLists();
-  getProducts();
-};
-
 // socket setup
 io.on("connection", (socket) => {
   console.log("user have connected", socket.id);
@@ -76,7 +71,7 @@ io.on("connection", (socket) => {
     console.log("user have disconnected")
   });
 
-  socket.on(SOCKET.GET_INITIAL_DATA, result);
+  socket.on(SOCKET.GET_INITIAL_DATA, getShoppingLists);
   socket.on(SOCKET.SEARCH_PRODUCTS, searchProducts);
 
   socket.on(SOCKET.DELETE_SHOPPING_LIST, (id) => {

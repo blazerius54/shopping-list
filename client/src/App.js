@@ -3,11 +3,17 @@ import socketIOClient from "socket.io-client";
 import {MainWrapper, ItemWrapper, ControllsWrapper} from "./styles";
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 
 const SOCKET = require("../../global/consts/socket");
 
 const io = socketIOClient.connect("http://localhost:5000");
-
+function ListItemLink(props) {
+  return <ListItem button component="a" {...props} />;
+}
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [products, setProducts] = useState([]);
@@ -16,7 +22,7 @@ const App = () => {
   const handleProductOnChange = (e) => {
     const {value} = e.target;
     setNewProduct(value);
-    setTimeout(() => io.emit(SOCKET.SEARCH_PRODUCTS, value), 100);
+    setTimeout(() => searchProducts(value), 100);
   };
 
   const getListData = (lists) => {
@@ -38,10 +44,11 @@ const App = () => {
   const addNewProduct = () => {
     io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct);
     setNewProduct("");
+    searchProducts("");
   };
 
-  const searchProducts = () => {
-    io.emit(SOCKET.SEARCH_PRODUCTS, newProduct);
+  const searchProducts = (product) => {
+    io.emit(SOCKET.SEARCH_PRODUCTS, product);
   };
 
   useEffect(() => {
@@ -66,35 +73,38 @@ const App = () => {
         <Button color="primary" onClick={addNewProduct}>
           Добавить
         </Button>
-        <Button color="primary" onClick={searchProducts}>
-          Поиск
-        </Button>
       </ControllsWrapper>
-      {
-        shoppingLists.length > 0 && (
-          shoppingLists.map(({name, _id, date, items}) => (
-            <ItemWrapper key={_id} style={{display: "flex"}}>
-              <p>{date}</p>
-              <ul>
-                {
-                  items.map(({product, _id}) => (
-                    <li key={_id}>{product.name}</li>
-                  ))
-                }
-              </ul>
-              <button onClick={() => deleteShoppingList(_id)}>delete</button>
-            </ItemWrapper>
-          ))
-        )
-      }
+      {/*{*/}
+      {/*  shoppingLists.length > 0 && (*/}
+      {/*    shoppingLists.map(({name, _id, date, items}) => (*/}
+      {/*      <ItemWrapper key={_id} style={{display: "flex"}}>*/}
+      {/*        <p>{date}</p>*/}
+      {/*        <ul>*/}
+      {/*          {*/}
+      {/*            items.map(({product, _id}) => (*/}
+      {/*              <li key={_id}>{product.name}</li>*/}
+      {/*            ))*/}
+      {/*          }*/}
+      {/*        </ul>*/}
+      {/*        <button onClick={() => deleteShoppingList(_id)}>delete</button>*/}
+      {/*      </ItemWrapper>*/}
+      {/*    ))*/}
+      {/*  )*/}
+      {/*}*/}
 
-      {
-        products.length > 0 && (
-          products.map(({name, _id}) => (
-            <p key={_id}>{name}</p>
-          ))
-        )
-      }
+
+      <List component="nav" aria-label="secondary mailbox folders">
+        {
+          products.length > 0 && (
+            products.map(({name, _id}) => (
+              <ListItem key={_id} button onClick={() => setNewProduct(name)}>
+                <ListItemText primary={name} />
+              </ListItem>
+            ))
+          )
+        }
+      </List>
+
     </MainWrapper>
   )
 };

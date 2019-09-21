@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
 `;
 
 export const ItemWrapper = styled.div`
