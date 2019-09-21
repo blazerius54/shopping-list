@@ -1,9 +1,18 @@
 import styled from "styled-components";
+import {makeStyles} from '@material-ui/core/styles';
+
+export const useStyles = makeStyles(theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.default,
+  },
+}));
 
 export const MainWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  max-width: 450px;
+  justify-content: space-between;
+  max-width: 700px;
 `;
 
 export const ItemWrapper = styled.div`
@@ -11,6 +20,16 @@ export const ItemWrapper = styled.div`
   align-items: center;
 `;
 
-export const ControllsWrapper = styled.div`
+export const ControlsWrapper = styled.div`
   display: flex;
+  width: 300px;
+`;
+
+export const ListsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  //& > * {
+  //  align-self: flex-start;
+  //  flex: 1 0 30%;
+  //}
 `;
