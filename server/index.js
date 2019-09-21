@@ -47,11 +47,11 @@ const addNewProduct = (name) => {
     .then(product => {
       if (product) {
         return;
-      } else {
-        newProduct
-          .save()
-          .then(() => getProducts());
       }
+
+      newProduct
+        .save()
+        .then(() => getProducts());
     });
 };
 
