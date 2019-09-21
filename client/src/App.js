@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import socketIOClient from "socket.io-client";
-import { MainWrapper, ItemWrapper, ControllsWrapper } from "./styles";
+import {MainWrapper, ItemWrapper, ControllsWrapper} from "./styles";
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+
 const SOCKET = require("../../global/consts/socket");
 
 const io = socketIOClient.connect("http://localhost:5000");
@@ -36,6 +37,7 @@ const App = () => {
 
   const addNewProduct = () => {
     io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct);
+    setNewProduct("");
   };
 
   useEffect(() => {
@@ -48,45 +50,46 @@ const App = () => {
   }, []);
 
   return (
-      <MainWrapper>
-        <ControllsWrapper>
-          <Input
-              defaultValue={newProduct}
-              inputProps={{
-                'aria-label': 'description',
-              }}
-              onChange={handleProductOnChange}
-          />
-          <Button color="primary" onClick={addNewProduct}>
-            Добавить
-          </Button>
-        </ControllsWrapper>
-        {
-          shoppingLists.length > 0 && (
-              shoppingLists.map(({name, _id, date, items}) => (
-                  <ItemWrapper key={_id} style={{display: "flex"}}>
-                    <p>{date}</p>
-                    <ul>
-                      {
-                        items.map(({product, _id}) => (
-                          <li key={_id}>{product.name}</li>
-                        ))
-                      }
-                    </ul>
-                    <button onClick={() => deleteShoppingList(_id)}>delete</button>
-                  </ItemWrapper>
-              ))
-          )
-        }
+    <MainWrapper>
+      <ControllsWrapper>
+        <Input
+          value={newProduct}
+          defaultValue={newProduct}
+          inputProps={{
+            'aria-label': 'description',
+          }}
+          onChange={handleProductOnChange}
+        />
+        <Button color="primary" onClick={addNewProduct}>
+          Добавить
+        </Button>
+      </ControllsWrapper>
+      {
+        shoppingLists.length > 0 && (
+          shoppingLists.map(({name, _id, date, items}) => (
+            <ItemWrapper key={_id} style={{display: "flex"}}>
+              <p>{date}</p>
+              <ul>
+                {
+                  items.map(({product, _id}) => (
+                    <li key={_id}>{product.name}</li>
+                  ))
+                }
+              </ul>
+              <button onClick={() => deleteShoppingList(_id)}>delete</button>
+            </ItemWrapper>
+          ))
+        )
+      }
 
-        {
-          products.length > 0 && (
-              products.map(({name}) => (
-                  <p key={name}>{name}</p>
-              ))
-          )
-        }
-      </MainWrapper>
+      {
+        products.length > 0 && (
+          products.map(({name, _id}) => (
+            <p key={_id}>{name}</p>
+          ))
+        )
+      }
+    </MainWrapper>
   )
 };
 
