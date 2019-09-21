@@ -14,17 +14,17 @@ const App = () => {
   const [newProduct, setNewProduct] = useState("");
 
   const handleProductOnChange = (e) => {
-    setNewProduct(e.target.value);
+    const {value} = e.target;
+    setNewProduct(value);
+    setTimeout(() => io.emit(SOCKET.SEARCH_PRODUCTS, value), 100);
   };
 
   const getListData = (lists) => {
     setShoppingLists(lists);
-    console.log(lists);
   };
 
   const getProductsData = (products) => {
     setProducts(products);
-    console.log(products);
   };
 
   const deleteShoppingList = id => {
@@ -38,6 +38,10 @@ const App = () => {
   const addNewProduct = () => {
     io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct);
     setNewProduct("");
+  };
+
+  const searchProducts = () => {
+    io.emit(SOCKET.SEARCH_PRODUCTS, newProduct);
   };
 
   useEffect(() => {
@@ -54,7 +58,6 @@ const App = () => {
       <ControllsWrapper>
         <Input
           value={newProduct}
-          defaultValue={newProduct}
           inputProps={{
             'aria-label': 'description',
           }}
@@ -62,6 +65,9 @@ const App = () => {
         />
         <Button color="primary" onClick={addNewProduct}>
           Добавить
+        </Button>
+        <Button color="primary" onClick={searchProducts}>
+          Поиск
         </Button>
       </ControllsWrapper>
       {

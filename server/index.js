@@ -55,6 +55,15 @@ const addNewProduct = (name) => {
     });
 };
 
+const searchProducts = (name) => {
+  if (!name) {
+    return io.emit(SOCKET.GET_PRODUCTS, []);
+  }
+  ProductsModel
+    .find({"name": {"$regex": `${name}`, "$options": "i"}})
+    .then(products => io.emit(SOCKET.GET_PRODUCTS, products));
+};
+
 const result = () => {
   getShoppingLists();
   getProducts();
@@ -68,6 +77,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on(SOCKET.GET_INITIAL_DATA, result);
+  socket.on(SOCKET.SEARCH_PRODUCTS, searchProducts);
 
   socket.on(SOCKET.DELETE_SHOPPING_LIST, (id) => {
     ShoppingListModel
