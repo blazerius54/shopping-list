@@ -49,9 +49,7 @@ const addNewProduct = (name) => {
         return;
       }
 
-      newProduct
-        .save()
-        .then(() => getProducts());
+      newProduct.save();
     });
 };
 

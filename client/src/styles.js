@@ -3,10 +3,16 @@ import {makeStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
+    width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.default,
+    maxHeight: "330px",
+    overflow: "hidden",
   },
+
+  input: {
+    alignSelf: "flex-start",
+  }
 }));
 
 export const MainWrapper = styled.div`

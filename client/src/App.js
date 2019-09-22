@@ -30,6 +30,7 @@ const App = () => {
 
   const addProductInList = () => {
     setProductsForList(prevProducts => [...prevProducts, newProduct]);
+    addNewProduct();
   };
 
   const getListData = (lists) => {
@@ -37,7 +38,6 @@ const App = () => {
   };
 
   const getProductsData = (products) => {
-    console.log(products);
     setProducts(products);
   };
 
@@ -79,13 +79,14 @@ const App = () => {
             inputProps={{
               'aria-label': 'description',
             }}
+            className={classes.input}
             onChange={handleProductOnChange}
           />
           {/*<Button color="primary" onClick={addNewProduct}>*/}
           {/*  Добавить*/}
           {/*</Button>*/}
           <Button color="primary" onClick={addProductInList}>
-            Добавить в список
+            Добавить
           </Button>
         </ControlsWrapper>
         {/*{*/}
