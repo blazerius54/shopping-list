@@ -49,8 +49,10 @@ const addNewProduct = (name) => {
         return;
       }
 
-      newProduct.save();
-    });
+      newProduct
+        .save()
+        .then(() => io.emit(SOCKET.GET_NEW_PRODUCT, newProduct));
+    })
 };
 
 const searchProducts = (name) => {

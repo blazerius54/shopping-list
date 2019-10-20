@@ -19,46 +19,42 @@ function ListItemLink(props) {
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState("");
-  const [productsForList, setProductsForList] = useState([]);
+  const [newProduct, setNewProduct] = useState({name: ""});
+  const [productsInList, setProductsInList] = useState([]);
 
   const handleProductOnChange = (e) => {
     const {value} = e.target;
-    setNewProduct(value);
+    setNewProduct({name: value});
     setTimeout(() => searchProducts(value), 100);
   };
 
   const addProductInList = () => {
-    if (productsForList.includes(newProduct)) return;
+    if(!newProduct || productsInList.includes(newProduct)) {
+      return
+    }
 
-    const product = {
-      name: newProduct,
-      type: "кг",
-      amount: 0,
-    };
 
-    setProductsForList(prevProducts => [...prevProducts, product]);
-    addNewProduct();
+    if (products.some(item => item.name === newProduct.name)) {
+      setProductsInList(prevProducts => [...prevProducts, newProduct]);
+    } else {
+      addNewProduct();
+    }
   };
 
   const handleProductTypeChange = (index, prop, val) => {
     const newProducts = [
-      ...productsForList.slice(0, index),
+      ...productsInList.slice(0, index),
       {
-        ...productsForList[index],
-        // name: productsForList[index].name,
-        // amount: productsForList[index].amount,
+        ...productsInList[index],
+        // name: productsInList[index].name,
+        // amount: productsInList[index].amount,
         [prop]: val,
 
       },
-      ...productsForList.slice(index + 1)
+      ...productsInList.slice(index + 1)
     ];
-    setProductsForList(newProducts);
+    setProductsInList(newProducts);
   };
-
-  const handleAmountChange = (amount) => {
-
-  }
 
   const getListData = (lists) => {
     setShoppingLists(lists);
@@ -78,7 +74,7 @@ const App = () => {
   };
 
   const addNewProduct = () => {
-    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct);
+    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name);
     setNewProduct("");
     searchProducts("");
   };
@@ -87,10 +83,25 @@ const App = () => {
     io.emit(SOCKET.SEARCH_PRODUCTS, product);
   };
 
+  const getNewProduct = newProduct => {
+    console.log(newProduct);
+
+    const product = {
+      name: newProduct.name,
+      type: "кг",
+      amount: 0,
+      _id: newProduct.id,
+    };
+
+    setProductsInList(prevProducts => [...prevProducts, product]);
+  };
+
   useEffect(() => {
     fetchInitialData();
     io.on(SOCKET.GET_SHOPPING_LIST, getListData);
     io.on(SOCKET.GET_PRODUCTS, getProductsData);
+    io.on(SOCKET.GET_NEW_PRODUCT, getNewProduct);
+
     return () => {
       io.off(SOCKET.GET_SHOPPING_LIST);
     }
@@ -103,7 +114,7 @@ const App = () => {
       <ListsWrapper>
         <ControlsWrapper>
           <Input
-            value={newProduct}
+            value={newProduct.name}
             inputProps={{
               'aria-label': 'description',
             }}
@@ -136,16 +147,16 @@ const App = () => {
         {/*}*/}
         {products.length > 0 && (
           <List component="ul" className={classes.root}>
-            {products.map(({name, _id}) => (
-              <ListItem key={_id} button onClick={() => setNewProduct(name)}>
-                <ListItemText primary={name}/>
+            {products.map((product) => (
+              <ListItem key={product._id} button onClick={() => setNewProduct(product)}>
+                <ListItemText primary={product.name}/>
               </ListItem>
             ))}
           </List>
         )}
       </ListsWrapper>
 
-      <ShoppingList productsForList={productsForList} handleProductTypeChange={handleProductTypeChange}/>
+      <ShoppingList productsInList={productsInList} handleProductTypeChange={handleProductTypeChange}/>
     </MainWrapper>
   )
 };
