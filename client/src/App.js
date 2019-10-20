@@ -41,19 +41,24 @@ const App = () => {
     addNewProduct();
   };
 
-  const handleProductTypeChange = (index, type) => {
+  const handleProductTypeChange = (index, prop, val) => {
     const newProducts = [
       ...productsForList.slice(0, index),
       {
-        name: productsForList[index].name,
-        amount: productsForList[index].amount,
-        type,
+        ...productsForList[index],
+        // name: productsForList[index].name,
+        // amount: productsForList[index].amount,
+        [prop]: val,
 
       },
       ...productsForList.slice(index + 1)
     ];
     setProductsForList(newProducts);
   };
+
+  const handleAmountChange = (amount) => {
+
+  }
 
   const getListData = (lists) => {
     setShoppingLists(lists);

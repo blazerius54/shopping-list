@@ -5,5 +5,11 @@ export const useStyles = makeStyles(theme => ({
     alignSelf: "stretch",
     display: "flex",
     alignItems: "flex-end",
+  },
+  textField: {
+    marginBottom: 0,
+  },
+  select: {
+    alignSelf: "flex-end",
   }
 }));
