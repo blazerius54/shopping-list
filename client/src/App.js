@@ -29,8 +29,30 @@ const App = () => {
   };
 
   const addProductInList = () => {
-    setProductsForList(prevProducts => [...prevProducts, newProduct]);
+    if (productsForList.includes(newProduct)) return;
+
+    const product = {
+      name: newProduct,
+      type: "кг",
+      amount: 0,
+    };
+
+    setProductsForList(prevProducts => [...prevProducts, product]);
     addNewProduct();
+  };
+
+  const handleProductTypeChange = (index, type) => {
+    const newProducts = [
+      ...productsForList.slice(0, index),
+      {
+        name: productsForList[index].name,
+        amount: productsForList[index].amount,
+        type,
+
+      },
+      ...productsForList.slice(index + 1)
+    ];
+    setProductsForList(newProducts);
   };
 
   const getListData = (lists) => {
@@ -38,6 +60,7 @@ const App = () => {
   };
 
   const getProductsData = (products) => {
+    console.log(products)
     setProducts(products);
   };
 
@@ -117,7 +140,7 @@ const App = () => {
         )}
       </ListsWrapper>
 
-      <ShoppingList productsForList={productsForList}/>
+      <ShoppingList productsForList={productsForList} handleProductTypeChange={handleProductTypeChange}/>
     </MainWrapper>
   )
 };
