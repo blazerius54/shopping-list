@@ -89,7 +89,10 @@ server.listen(port, () => console.log(`Server started on port ${port}`, config.m
 
 mongoose.connect(
   config.mongoURI,
-  {useNewUrlParser: true}
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  },
 );
 
 db.once("open", () => console.log("mongo is running"));
