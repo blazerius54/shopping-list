@@ -9,7 +9,12 @@ const ShoppingList = ({productsInList, handleProductTypeChange}) => (
       <h2>List</h2>
       {productsInList.length > 0 &&
       productsInList.map((product, index) => (
-        <ShoppingListItem product={product} index={index} handleProductTypeChange={handleProductTypeChange}/>
+        <ShoppingListItem
+          key={product._id}
+          product={product}
+          index={index}
+          handleProductTypeChange={handleProductTypeChange}
+        />
       ))}
     </List>
   </ShoppingListWrapper>

@@ -18,7 +18,7 @@ function ListItemLink(props) {
 
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [fetchedProducts, setFetchedProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({name: ""});
   const [productsInList, setProductsInList] = useState([]);
 
@@ -33,8 +33,7 @@ const App = () => {
       return
     }
 
-
-    if (products.some(item => item.name === newProduct.name)) {
+    if (fetchedProducts.some(item => item.name === newProduct.name)) {
       setProductsInList(prevProducts => [...prevProducts, newProduct]);
     } else {
       addNewProduct();
@@ -46,10 +45,7 @@ const App = () => {
       ...productsInList.slice(0, index),
       {
         ...productsInList[index],
-        // name: productsInList[index].name,
-        // amount: productsInList[index].amount,
         [prop]: val,
-
       },
       ...productsInList.slice(index + 1)
     ];
@@ -61,8 +57,7 @@ const App = () => {
   };
 
   const getProductsData = (products) => {
-    console.log(products)
-    setProducts(products);
+    setFetchedProducts(products);
   };
 
   const deleteShoppingList = id => {
@@ -84,8 +79,6 @@ const App = () => {
   };
 
   const getNewProduct = newProduct => {
-    console.log(newProduct);
-
     const product = {
       name: newProduct.name,
       type: "кг",
@@ -145,9 +138,9 @@ const App = () => {
         {/*    ))*/}
         {/*  )*/}
         {/*}*/}
-        {products.length > 0 && (
+        {fetchedProducts.length > 0 && (
           <List component="ul" className={classes.root}>
-            {products.map((product) => (
+            {fetchedProducts.map((product) => (
               <ListItem key={product._id} button onClick={() => setNewProduct(product)}>
                 <ListItemText primary={product.name}/>
               </ListItem>
