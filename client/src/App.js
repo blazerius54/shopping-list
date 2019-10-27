@@ -19,7 +19,7 @@ function ListItemLink(props) {
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({name: ""});
+  const [newProduct, setNewProduct] = useState({name: "", type: "шт"});
   const [productsInList, setProductsInList] = useState([]);
 
   const handleProductOnChange = (e) => {
@@ -34,7 +34,7 @@ const App = () => {
     }
 
     if (fetchedProducts.some(item => item.name === newProduct.name)) {
-      setProductsInList(prevProducts => [...prevProducts, newProduct]);
+      setProductsInList(prevProducts => [...prevProducts, {...newProduct, type: "шт"}]);
     } else {
       addNewProduct();
     }
@@ -53,6 +53,7 @@ const App = () => {
   };
 
   const getListData = (lists) => {
+    console.log(lists)
     setShoppingLists(lists);
   };
 
@@ -87,6 +88,22 @@ const App = () => {
     };
 
     setProductsInList(prevProducts => [...prevProducts, product]);
+  };
+
+  const saveNewShoppingList = () => {
+    const newShoppingList = {
+      date: "",
+      items: [
+        productsInList.map(({name, _id, type}) => ({
+          name,
+          _id,
+          type,
+        }))
+      ],
+    };
+
+    console.log(shoppingLists, newShoppingList)
+
   };
 
   useEffect(() => {
@@ -147,8 +164,9 @@ const App = () => {
             ))}
           </List>
         )}
-      </ListsWrapper>
+        <button onClick={saveNewShoppingList}>show product list</button>
 
+      </ListsWrapper>
       <ShoppingList productsInList={productsInList} handleProductTypeChange={handleProductTypeChange}/>
     </MainWrapper>
   )
