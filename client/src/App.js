@@ -12,20 +12,23 @@ const SOCKET = require("../../global/consts/socket");
 
 const io = socketIOClient.connect("http://localhost:5000");
 
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
-
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({name: ""});
+  const [newProduct, setNewProduct] = useState({name: "", type: "шт"});
   const [productsInList, setProductsInList] = useState([]);
 
   const handleProductOnChange = (e) => {
     const {value} = e.target;
-    setNewProduct({name: value});
+    console.log(newProduct)
+    setNewProduct({...newProduct, name: value});
     setTimeout(() => searchProducts(value), 100);
+  };
+
+  const addNewProduct = () => {
+    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name);
+    setNewProduct("");
+    searchProducts("");
   };
 
   const addProductInList = () => {
@@ -38,6 +41,10 @@ const App = () => {
     } else {
       addNewProduct();
     }
+  };
+
+  const setProductInInput = (product)=> () => {
+    setNewProduct({...product, type: "шт"});
   };
 
   const handleProductTypeChange = (index, prop, val) => {
@@ -66,12 +73,6 @@ const App = () => {
 
   const fetchInitialData = () => {
     io.emit(SOCKET.GET_INITIAL_DATA);
-  };
-
-  const addNewProduct = () => {
-    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name);
-    setNewProduct("");
-    searchProducts("");
   };
 
   const searchProducts = (product) => {
@@ -141,7 +142,7 @@ const App = () => {
         {fetchedProducts.length > 0 && (
           <List component="ul" className={classes.root}>
             {fetchedProducts.map((product) => (
-              <ListItem key={product._id} button onClick={() => setNewProduct(product)}>
+              <ListItem key={product._id} button onClick={setProductInInput(product)}>
                 <ListItemText primary={product.name}/>
               </ListItem>
             ))}
