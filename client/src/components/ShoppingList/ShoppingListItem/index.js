@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import {useStyles} from "./styles";
+import {useStyles, ControlsWrapper} from "./styles";
 
 const ShoppingListItem = ({product, handleProductTypeChange, index}) => {
   const changeProductType = (event) => {
@@ -19,30 +19,32 @@ const ShoppingListItem = ({product, handleProductTypeChange, index}) => {
 
   const classes = useStyles();
   return (
-    <ListItem key={product.name} button>
+    <ListItem key={product.name} className={classes.itemWrapper} button>
       <ListItemText className={classes.inputLabel} primary={product.name}/>
-      <TextField
-        id="standard-number"
-        label="количество"
-        onChange={handleAmountChange}
-        type="number"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        margin="normal"
-      />
-      <FormControl
-        className={classes.select}
-      >
-        <Select
-          value={product.type || "шт"}
-          onChange={changeProductType}
+      <ControlsWrapper>
+        <TextField
+          id="standard-number"
+          label="количество"
+          onChange={handleAmountChange}
+          type="number"
+          className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          // margin="normal"
+        />
+        <FormControl
+          className={classes.select}
         >
-          <MenuItem value={"шт"}>шт</MenuItem>
-          <MenuItem value={"кг"}>кг</MenuItem>
-        </Select>
-      </FormControl>
+          <Select
+            value={product.type || "шт"}
+            onChange={changeProductType}
+          >
+            <MenuItem value={"шт"}>шт</MenuItem>
+            <MenuItem value={"кг"}>кг</MenuItem>
+          </Select>
+        </FormControl>
+      </ControlsWrapper>
     </ListItem>
   )
 };
