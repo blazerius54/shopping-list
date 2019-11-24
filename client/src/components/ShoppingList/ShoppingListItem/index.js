@@ -31,7 +31,6 @@ const ShoppingListItem = ({product, handleProductTypeChange, index}) => {
           InputLabelProps={{
             shrink: true,
           }}
-          // margin="normal"
         />
         <FormControl
           className={classes.select}

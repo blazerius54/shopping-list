@@ -41,6 +41,8 @@ const App = () => {
     } else {
       addNewProduct();
     }
+
+    setNewProduct({name: "", type: "шт"})
   };
 
   const setProductInInput = (product)=> () => {
@@ -139,7 +141,7 @@ const App = () => {
         {/*    ))*/}
         {/*  )*/}
         {/*}*/}
-        {fetchedProducts.length > 0 && (
+        {fetchedProducts.length > 0 && newProduct.name.length > 0 && (
           <List component="ul" className={classes.root}>
             {fetchedProducts.map((product) => (
               <ListItem key={product._id} button onClick={setProductInInput(product)}>
@@ -150,7 +152,13 @@ const App = () => {
         )}
       </ListsWrapper>
 
-      <ShoppingList productsInList={productsInList} handleProductTypeChange={handleProductTypeChange}/>
+      {productsInList.length > 0 && (
+        <ShoppingList
+          productsInList={productsInList}
+          handleProductTypeChange={handleProductTypeChange}
+          saveNewProductList={()=>console.log(productsInList)}
+        />
+      )}
     </MainWrapper>
   )
 };
