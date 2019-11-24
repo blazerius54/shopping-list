@@ -4,7 +4,7 @@ import {ComponentWrapper, ShoppingListWrapper} from "./styles";
 import ShoppingListItem from "./ShoppingListItem";
 import Button from "@material-ui/core/Button";
 
-const ShoppingList = ({productsInList, handleProductTypeChange, saveNewProductList}) => {
+const ShoppingList = ({productsInList, handleProductInfoChange, saveNewProductList}) => {
   return (
     <ComponentWrapper>
       <List disablePadding>
@@ -16,7 +16,7 @@ const ShoppingList = ({productsInList, handleProductTypeChange, saveNewProductLi
                 key={product._id}
                 product={product}
                 index={index}
-                handleProductTypeChange={handleProductTypeChange}
+                handleProductInfoChange={handleProductInfoChange}
               />
             ))}
           </ShoppingListWrapper>

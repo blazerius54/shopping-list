@@ -8,48 +8,57 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingList from "./components/ShoppingList";
 
-const SOCKET = require("../../global/consts/socket");
 
+//TODO make helper func for this:
+const SOCKET = require("../../global/consts/socket");
 const io = socketIOClient.connect("http://localhost:5000");
+
+const newProductTemplate = {name: "", type: "шт", amount: 0};
 
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({name: "", type: "шт"});
+  const [newProduct, setNewProduct] = useState(newProductTemplate);
   const [productsInList, setProductsInList] = useState([]);
 
   const handleProductOnChange = (e) => {
     const {value} = e.target;
-    console.log(newProduct)
     setNewProduct({...newProduct, name: value});
     setTimeout(() => searchProducts(value), 100);
   };
 
   const addNewProduct = () => {
-    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name);
+    io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name.trim());
     setNewProduct("");
     searchProducts("");
   };
 
   const addProductInList = () => {
-    if(!newProduct || productsInList.includes(newProduct)) {
+    if (!newProduct.name || productsInList.some(searchTrimmedName)) {
       return
     }
 
-    if (fetchedProducts.some(item => item.name === newProduct.name)) {
+    if (fetchedProducts.some(searchTrimmedName)) {
       setProductsInList(prevProducts => [...prevProducts, newProduct]);
     } else {
       addNewProduct();
     }
 
-    setNewProduct({name: "", type: "шт"})
+    function searchTrimmedName (item) {
+      return (
+        item.name.trim() === newProduct.name.trim()
+      )
+    }
+
+    setNewProduct(newProductTemplate);
   };
 
-  const setProductInInput = (product)=> () => {
+  const setProductInInput = (product) => () => {
     setNewProduct({...product, type: "шт"});
+
   };
 
-  const handleProductTypeChange = (index, prop, val) => {
+  const handleProductInfoChange = (index, prop, val) => {
     const newProducts = [
       ...productsInList.slice(0, index),
       {
@@ -155,8 +164,8 @@ const App = () => {
       {productsInList.length > 0 && (
         <ShoppingList
           productsInList={productsInList}
-          handleProductTypeChange={handleProductTypeChange}
-          saveNewProductList={()=>console.log(productsInList)}
+          handleProductInfoChange={handleProductInfoChange}
+          saveNewProductList={() => console.log(productsInList)}
         />
       )}
     </MainWrapper>
