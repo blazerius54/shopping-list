@@ -73,6 +73,8 @@ io.on("connection", (socket) => {
 
   socket.on(SOCKET.GET_INITIAL_DATA, getShoppingLists);
   socket.on(SOCKET.SEARCH_PRODUCTS, searchProducts);
+  socket.on(SOCKET.SAVE_NEW_PRODUCT_LIST, (products) => console.log(products));
+
 
   socket.on(SOCKET.DELETE_SHOPPING_LIST, (id) => {
     ShoppingListModel

@@ -104,7 +104,6 @@ const App = () => {
 
     console.log(shoppingLists, newShoppingList)
     io.emit(SOCKET.SAVE_NEW_PRODUCT_LIST, newShoppingList);
-
   };
 
   useEffect(() => {
