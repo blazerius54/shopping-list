@@ -92,7 +92,7 @@ const App = () => {
 
   const saveNewShoppingList = () => {
     const newShoppingList = {
-      date: "",
+      date: new Date(),
       items: [
         productsInList.map(({name, _id, type}) => ({
           name,
@@ -103,6 +103,7 @@ const App = () => {
     };
 
     console.log(shoppingLists, newShoppingList)
+    io.emit(SOCKET.SAVE_NEW_PRODUCT_LIST, newShoppingList);
 
   };
 
