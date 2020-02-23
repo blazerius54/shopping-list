@@ -23,19 +23,25 @@ const App = () => {
   const [productsInList, setProductsInList] = useState([]);
 
   const handleProductOnChange = (e) => {
-    const {value} = e.target;
-    setNewProduct({name: value});
-    setTimeout(() => searchProducts(value), 100);
+    const { value } = e.target;
+
+    setNewProduct({ ...newProduct, name: value });
+    if (value) {
+      setTimeout(() => searchProducts(value), 100);
+    }
   };
 
   const addProductInList = () => {
-    if(!newProduct || productsInList.includes(newProduct)) {
-      return
+    const isProductInFetched = fetchedProducts.some(item => item.name === newProduct.name);
+    const isProductListed = productsInList.some(item => item.name === newProduct.name);
+
+    if (isProductListed || !newProduct.name) {
+      return;
     }
 
-    if (fetchedProducts.some(item => item.name === newProduct.name)) {
-      setProductsInList(prevProducts => [...prevProducts, {...newProduct, type: "шт"}]);
-    } else {
+    if (isProductInFetched && !isProductListed) {
+      setProductsInList(prevProducts => [...prevProducts, newProduct]);
+    } else if (!isProductInFetched) {
       addNewProduct();
     }
   };
@@ -71,7 +77,7 @@ const App = () => {
 
   const addNewProduct = () => {
     io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name);
-    setNewProduct("");
+    setNewProduct({name: "", type: "шт"});
     searchProducts("");
   };
 
@@ -164,7 +170,7 @@ const App = () => {
             ))}
           </List>
         )}
-        <button onClick={saveNewShoppingList}>show product list</button>
+        <button onClick={saveNewShoppingList}>save product list</button>
 
       </ListsWrapper>
       <ShoppingList productsInList={productsInList} handleProductTypeChange={handleProductTypeChange}/>
