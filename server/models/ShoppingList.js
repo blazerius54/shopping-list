@@ -12,6 +12,10 @@ const ShoppingListSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'shopping-items'
     },
+    name: {
+      type: String,
+      required: true,
+    },
     amountType: {
       type: String,
       required: true,

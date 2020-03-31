@@ -65,15 +65,12 @@ const searchProducts = (name) => {
 };
 
 const saveProductList = (products) => {
-  console.log("hi", products)
   if (products.length == 0) {
     return;
   }
 
-  const newProductList = new ShoppingListModel({date: products.date, items: products.items});
+  const newProductList = new ShoppingListModel(products);
   console.log(newProductList)
-
-
 };
 
 // socket setup

@@ -19,6 +19,7 @@ function ListItemLink(props) {
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
+  //TODO упростить объект, оставить только name - строку
   const [newProduct, setNewProduct] = useState({name: "", amountType: "шт"});
   const [productsInList, setProductsInList] = useState([]);
 
@@ -40,7 +41,15 @@ const App = () => {
     }
 
     if (isProductInFetched && !isProductListed) {
-      setProductsInList(prevProducts => [...prevProducts, {...newProduct, name: newProduct.name, amountType: "шт"}]);
+      setProductsInList(prevProducts => [
+        ...prevProducts,
+        {
+          ...newProduct,
+          name: newProduct.name,
+          amountType: "шт",
+          amount: 0,
+        }
+      ]);
     } else if (!isProductInFetched) {
       addNewProduct();
     }
@@ -107,7 +116,7 @@ const App = () => {
     };
 
     console.log(productsInList, newShoppingList)
-    // io.emit(SOCKET.SAVE_NEW_PRODUCT_LIST, newShoppingList);
+    io.emit(SOCKET.SAVE_NEW_PRODUCT_LIST, newShoppingList);
   };
 
   useEffect(() => {
@@ -162,11 +171,7 @@ const App = () => {
         {fetchedProducts.length > 0 && (
           <List component="ul" className={classes.root}>
             {fetchedProducts.map((product) => (
-              <ListItem key={product._id} button onClick={() => {
-                console.log(product);
-                // setNewProduct({type: "шт", name: product.name});
-                setNewProduct(product);
-              }}>
+              <ListItem key={product._id} button onClick={() => setNewProduct(product)}>
                 <ListItemText primary={product.name}/>
               </ListItem>
             ))}
