@@ -7,14 +7,13 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import {useStyles, ControlsWrapper} from "./styles";
 
-const ShoppingListItem = ({product, handleProductTypeChange, index}) => {
+const ShoppingListItem = ({product, handleProductInfoChange, index}) => {
   const changeProductType = (event) => {
-    console.log(event.target.value)
-    handleProductTypeChange(index, "type", event.target.value);
+    handleProductInfoChange(index, "type", event.target.value);
   };
 
-  const handleAmountChange = (event) => {
-    handleProductTypeChange(index, "amount", event.target.value);
+  const handleAmountChange = (event, value) => {
+    handleProductInfoChange(index, "amount", event.target.value);
   };
 
   const classes = useStyles();

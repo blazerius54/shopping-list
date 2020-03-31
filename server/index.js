@@ -64,6 +64,18 @@ const searchProducts = (name) => {
     .then(products => io.emit(SOCKET.GET_PRODUCTS, products));
 };
 
+const saveProductList = (products) => {
+  console.log("hi", products)
+  if (products.length == 0) {
+    return;
+  }
+
+  const newProductList = new ShoppingListModel({date: products.date, items: products.items});
+  console.log(newProductList)
+
+
+};
+
 // socket setup
 io.on("connection", (socket) => {
   console.log("user have connected", socket.id);
@@ -73,7 +85,7 @@ io.on("connection", (socket) => {
 
   socket.on(SOCKET.GET_INITIAL_DATA, getShoppingLists);
   socket.on(SOCKET.SEARCH_PRODUCTS, searchProducts);
-  socket.on(SOCKET.SAVE_NEW_PRODUCT_LIST, (products) => console.log(products));
+  socket.on(SOCKET.SAVE_NEW_PRODUCT_LIST, saveProductList);
 
 
   socket.on(SOCKET.DELETE_SHOPPING_LIST, (id) => {

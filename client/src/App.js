@@ -47,15 +47,16 @@ const App = () => {
   };
 
   const handleProductTypeChange = (index, prop, val) => {
-    const newProducts = [
-      ...productsInList.slice(0, index),
-      {
-        ...productsInList[index],
-        [prop]: val,
-      },
-      ...productsInList.slice(index + 1)
-    ];
-    setProductsInList(newProducts);
+    console.log('test', index, prop, val)
+    // const newProducts = [
+    //   ...productsInList.slice(0, index),
+    //   {
+    //     ...productsInList[index],
+    //     [prop]: val,
+    //   },
+    //   ...productsInList.slice(index + 1)
+    // ];
+    // setProductsInList(newProducts);
   };
 
   const getListData = (lists) => {
@@ -99,17 +100,15 @@ const App = () => {
   const saveNewShoppingList = () => {
     const newShoppingList = {
       date: new Date(),
-      items: [
-        productsInList.map(({name, _id, type}) => ({
+      items: productsInList.map(({name, _id, amountType}) => ({
           name,
           _id,
-          type,
-        }))
-      ],
+          amountType,
+        })),
     };
 
-    console.log(shoppingLists, newShoppingList)
-    io.emit(SOCKET.SAVE_NEW_PRODUCT_LIST, newShoppingList);
+    console.log(productsInList, newShoppingList)
+    // io.emit(SOCKET.SAVE_NEW_PRODUCT_LIST, newShoppingList);
   };
 
   useEffect(() => {
@@ -173,7 +172,7 @@ const App = () => {
         <button onClick={saveNewShoppingList}>save product list</button>
 
       </ListsWrapper>
-      <ShoppingList productsInList={productsInList} handleProductTypeChange={handleProductTypeChange}/>
+      <ShoppingList productsInList={productsInList} handleProductInfoChange={handleProductTypeChange}/>
     </MainWrapper>
   )
 };
