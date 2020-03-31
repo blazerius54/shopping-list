@@ -19,7 +19,7 @@ function ListItemLink(props) {
 const App = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({name: "", type: "шт"});
+  const [newProduct, setNewProduct] = useState({name: "", amountType: "шт"});
   const [productsInList, setProductsInList] = useState([]);
 
   const handleProductOnChange = (e) => {
@@ -40,27 +40,26 @@ const App = () => {
     }
 
     if (isProductInFetched && !isProductListed) {
-      setProductsInList(prevProducts => [...prevProducts, newProduct]);
+      setProductsInList(prevProducts => [...prevProducts, {...newProduct, name: newProduct.name, amountType: "шт"}]);
     } else if (!isProductInFetched) {
       addNewProduct();
     }
   };
 
-  const handleProductTypeChange = (index, prop, val) => {
-    console.log('test', index, prop, val)
-    // const newProducts = [
-    //   ...productsInList.slice(0, index),
-    //   {
-    //     ...productsInList[index],
-    //     [prop]: val,
-    //   },
-    //   ...productsInList.slice(index + 1)
-    // ];
-    // setProductsInList(newProducts);
+  const handleProductInfoChange = (index, prop, val) => {
+    console.log(index, prop, val)
+    const newProducts = [
+      ...productsInList.slice(0, index),
+      {
+        ...productsInList[index],
+        [prop]: val,
+      },
+      ...productsInList.slice(index + 1)
+    ];
+    setProductsInList(newProducts);
   };
 
   const getListData = (lists) => {
-    console.log(lists)
     setShoppingLists(lists);
   };
 
@@ -78,7 +77,7 @@ const App = () => {
 
   const addNewProduct = () => {
     io.emit(SOCKET.ADD_NEW_PRODUCT, newProduct.name);
-    setNewProduct({name: "", type: "шт"});
+    setNewProduct({name: "", amountType: "шт"});
     searchProducts("");
   };
 
@@ -89,7 +88,7 @@ const App = () => {
   const getNewProduct = newProduct => {
     const product = {
       name: newProduct.name,
-      type: "кг",
+      amountType: "кг",
       amount: 0,
       _id: newProduct.id,
     };
@@ -163,7 +162,11 @@ const App = () => {
         {fetchedProducts.length > 0 && (
           <List component="ul" className={classes.root}>
             {fetchedProducts.map((product) => (
-              <ListItem key={product._id} button onClick={() => setNewProduct(product)}>
+              <ListItem key={product._id} button onClick={() => {
+                console.log(product);
+                // setNewProduct({type: "шт", name: product.name});
+                setNewProduct(product);
+              }}>
                 <ListItemText primary={product.name}/>
               </ListItem>
             ))}
@@ -172,7 +175,11 @@ const App = () => {
         <button onClick={saveNewShoppingList}>save product list</button>
 
       </ListsWrapper>
-      <ShoppingList productsInList={productsInList} handleProductInfoChange={handleProductTypeChange}/>
+      <ShoppingList
+        productsInList={productsInList}
+        handleProductInfoChange={handleProductInfoChange}
+        saveNewProductList={() => console.log(productsInList)}
+      />
     </MainWrapper>
   )
 };

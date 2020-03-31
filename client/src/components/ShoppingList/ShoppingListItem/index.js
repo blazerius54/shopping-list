@@ -9,7 +9,7 @@ import {useStyles, ControlsWrapper} from "./styles";
 
 const ShoppingListItem = ({product, handleProductInfoChange, index}) => {
   const changeProductType = (event) => {
-    handleProductInfoChange(index, "type", event.target.value);
+    handleProductInfoChange(index, "amountType", event.target.value);
   };
 
   const handleAmountChange = (event, value) => {
@@ -36,7 +36,7 @@ const ShoppingListItem = ({product, handleProductInfoChange, index}) => {
           className={classes.select}
         >
           <Select
-            value={product.type || "шт"}
+            value={product.amountType || "шт"}
             onChange={changeProductType}
           >
             <MenuItem value={"шт"}>шт</MenuItem>
